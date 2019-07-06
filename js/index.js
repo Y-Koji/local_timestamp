@@ -29,6 +29,7 @@ var SelectionViewModel = /** @class */ (function () {
         this.search = '';
         this.itemName = '';
         this.msg = '';
+        this.selectionChanged = null;
         this.methods = {
             add: function () {
                 if (!isEmpty(_this.itemName)) {
@@ -36,6 +37,9 @@ var SelectionViewModel = /** @class */ (function () {
                     _this.itemName = "";
                     _this.msg = '';
                     _this.methods.save();
+                    if (null != _this.selectionChanged) {
+                        _this.selectionChanged();
+                    }
                 }
                 else {
                     _this.msg = '項目名を入力してください';
@@ -45,6 +49,9 @@ var SelectionViewModel = /** @class */ (function () {
                 var indexOf = _this.options.indexOf(item);
                 _this.options.splice(indexOf, 1);
                 _this.methods.save();
+                if (null != _this.selectionChanged) {
+                    _this.selectionChanged();
+                }
             },
             filter: function (items) {
                 var filterd = [];
@@ -102,6 +109,7 @@ var AppViewModel = /** @class */ (function () {
         this.type = '';
         this.input = '';
         this.msg = '';
+        this.historyChanged = null;
         this.methods = {
             addItem: function () {
                 if (!isEmpty(_this.type)) {
@@ -111,6 +119,9 @@ var AppViewModel = /** @class */ (function () {
                     _this.input = '';
                     _this.msg = '';
                     _this.methods.save();
+                    if (null != _this.historyChanged) {
+                        _this.historyChanged();
+                    }
                 }
                 else {
                     _this.msg = '※ ドロップダウンで種別を選択してください．';
@@ -120,6 +131,9 @@ var AppViewModel = /** @class */ (function () {
                 var indexOf = _this.Logs.indexOf(item);
                 _this.Logs.splice(indexOf, 1);
                 _this.methods.save();
+                if (null != _this.historyChanged) {
+                    _this.historyChanged();
+                }
             },
             filterSelection: function (items) {
                 var filterd = [];
@@ -270,6 +284,8 @@ var DataViewModel = /** @class */ (function () {
         this.appVue = appVue;
         this.selectionVue = selectionVue;
         this.methods.setData();
+        this.selectionVue.model.selectionChanged = this.methods.setData;
+        this.appVue.model.historyChanged = this.methods.setData;
     }
     return DataViewModel;
 }());

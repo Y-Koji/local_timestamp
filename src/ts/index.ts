@@ -26,6 +26,7 @@ class SelectionViewModel {
     search: string = ''
     itemName: string = ''
     msg: string = ''
+    selectionChanged: any = null
 
     methods = {
         add: () => {
@@ -34,6 +35,10 @@ class SelectionViewModel {
                 this.itemName = ""
                 this.msg = ''
                 this.methods.save()
+
+                if (null != this.selectionChanged) {
+                    this.selectionChanged();
+                }
             } else {
                 this.msg = '項目名を入力してください'
             }
@@ -43,6 +48,9 @@ class SelectionViewModel {
             const indexOf = this.options.indexOf(item)
             this.options.splice(indexOf, 1)
             this.methods.save()
+            if (null != this.selectionChanged) {
+                this.selectionChanged();
+            }
         },
 
         filter: (items: SelectionItem[]) => {
@@ -112,6 +120,7 @@ class AppViewModel {
     input: string = ''
     selection: Selection
     msg: string = ''
+    historyChanged: any = null
 
     constructor(selection: Selection) {
         this.selection = selection
@@ -126,6 +135,9 @@ class AppViewModel {
                 this.input = ''
                 this.msg = ''
                 this.methods.save()
+                if (null != this.historyChanged) {
+                    this.historyChanged()
+                }
             } else {
                 this.msg = '※ ドロップダウンで種別を選択してください．'
             }
@@ -135,6 +147,9 @@ class AppViewModel {
             const indexOf = this.Logs.indexOf(item)
             this.Logs.splice(indexOf, 1)
             this.methods.save()
+            if (null != this.historyChanged) {
+                this.historyChanged();
+            }
         },
 
         filterSelection: (items: SelectionItem[]) => {
@@ -269,6 +284,8 @@ class DataViewModel {
         this.appVue = appVue
         this.selectionVue = selectionVue
         this.methods.setData()
+        this.selectionVue.model.selectionChanged = this.methods.setData
+        this.appVue.model.historyChanged = this.methods.setData
     }
 
     methods = {
