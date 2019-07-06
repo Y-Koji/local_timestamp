@@ -241,13 +241,14 @@ class HistoryViewModel {
 
         filter: (logs: LogItem[]) => {
             const filterd: LogItem[] = []
+            const regex  = new RegExp(this.search || '')
             for (let i = 0; i < logs.length && filterd.length < Number(this.ShowCount); i++) {
                 const log = logs[i];
 
                 if (!isEmpty(this.search)) {
-                    if (-1 != log.Time.indexOf(this.search) ||
-                        -1 != log.Type.indexOf(this.search) ||
-                        -1 != log.Memo.indexOf(this.search)) {
+                    if (regex.test(log.Time) ||
+                        regex.test(log.Type) ||
+                        regex.test(log.Memo)) {
                             filterd.push(log)
                         }
                 } else {

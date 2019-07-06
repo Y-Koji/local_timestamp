@@ -203,12 +203,13 @@ var HistoryViewModel = /** @class */ (function () {
             },
             filter: function (logs) {
                 var filterd = [];
+                var regex = new RegExp(_this.search || '');
                 for (var i = 0; i < logs.length && filterd.length < Number(_this.ShowCount); i++) {
                     var log = logs[i];
                     if (!isEmpty(_this.search)) {
-                        if (-1 != log.Time.indexOf(_this.search) ||
-                            -1 != log.Type.indexOf(_this.search) ||
-                            -1 != log.Memo.indexOf(_this.search)) {
+                        if (regex.test(log.Time) ||
+                            regex.test(log.Type) ||
+                            regex.test(log.Memo)) {
                             filterd.push(log);
                         }
                     }
