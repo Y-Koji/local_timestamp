@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="./css/uikit-rtl.min.css">
 </head>
 <body>
-    <h1 class="uk-heading-primary">timestamp</h1>
+    <header>
+        <h1 class="uk-heading-primary">timestamp</h1>
+    </header>
     <hr />
-    <div>
+    <main>
         <ul uk-accordion>
             <li>
                 <a class="uk-accordion-title" href="#">Setting</a>
@@ -47,7 +49,7 @@
                     <hr />
                     <ol>
                         <li class="uk-child-width-auto" v-for='x in filterLogs(Logs)'>
-                            <input type="text" class="uk-input" v-model="x.Time" />
+                            <input type="text" class="uk-input" v-model="x.Time" readonly />
                             <select v-model="x.Type" class="uk-select" v-on:change="app.model.methods.save()">
                                     <option v-for="item in selection.model.options">{{ item.Name }}</option>
                             </select>
@@ -63,12 +65,12 @@
                     <button class="uk-button uk-button-secondary">CSV Download</button>
                     <hr />
                     <div id="history">
-                            <div>
-                                <label>全{{ Logs.length }}件中<input class="uk-input uk-width-1-6" type="number" v-model="ShowCount" /> 件表示</label>
-                            </div>
-                            <div>
-                                <input class="uk-input uk-width-1-4" v-model="search" type="text" placeholder="検索" />
-                            </div>
+                        <div>
+                            <label>全{{ Logs.length }}件中<input class="uk-input uk-width-1-6" type="number" v-model="ShowCount" /> 件表示</label>
+                        </div>
+                        <div>
+                            <input class="uk-input uk-width-1-4" v-model="search" type="text" placeholder="検索" />
+                        </div>
                         <ol>
                             <li v-for='x in filter(Logs)' class="uk-child-width-auto">
                                 <input type="text" class="uk-input" v-model="x.Time" />
@@ -95,7 +97,7 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </main>
     <script src="./js/uikit.min.js"></script>
     <script src="./js/uikit-icons.min.js"></script>
     <script src="./js/vue.min.js"></script>
