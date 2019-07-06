@@ -2,6 +2,14 @@
 import Vue from "vue"
 
 const isEmpty = function (x: string) { return /^\s*$/g.test(x) }
+const removeArray = function (x: Array<any>) {
+    const length = x.length
+    for (let i = 0; i < length; i++) {
+        x.pop()
+    }
+}
+const LOCAL_KEY_ITEMS = 'items'
+const LOCAL_KEY_HISTORY = 'app'
 
 class SelectionItem {
     Name: string = ""
@@ -50,11 +58,11 @@ class SelectionViewModel {
         },
 
         save: () => {
-            localStorage.setItem('items', JSON.stringify(this.options))
+            localStorage.setItem(LOCAL_KEY_ITEMS, JSON.stringify(this.options))
         },
 
         load: () => {
-            const json = localStorage.getItem('items') || ''
+            const json = localStorage.getItem(LOCAL_KEY_ITEMS) || ''
             if (!isEmpty(json)) {
                 const items: SelectionItem[] = JSON.parse(json)
                 const length = this.options.length;
@@ -156,7 +164,7 @@ class AppViewModel {
         },
 
         load: () => {
-            const json = localStorage.getItem('app') || ''
+            const json = localStorage.getItem(LOCAL_KEY_HISTORY) || ''
             if (!isEmpty(json)) {
                 const logs: LogItem[] = JSON.parse(json)
                 const length = this.Logs.length
@@ -170,7 +178,7 @@ class AppViewModel {
         },
 
         save: () => {
-            localStorage.setItem('app', JSON.stringify(this.Logs))
+            localStorage.setItem(LOCAL_KEY_HISTORY, JSON.stringify(this.Logs))
         }
     }
 }
@@ -251,6 +259,60 @@ class History {
     }
 }
 
+class DataViewModel {
+    ItemList: string = 'ccc'
+    HistoryList: string = ''
+    selectionVue: Selection
+    appVue: App
+
+    constructor(appVue: App, selectionVue: Selection) {
+        this.appVue = appVue
+        this.selectionVue = selectionVue
+        this.methods.setData()
+    }
+
+    methods = {
+        setData: () => {
+            this.ItemList = JSON.stringify(this.selectionVue.model.options)
+            this.HistoryList = JSON.stringify(this.appVue.model.Logs)
+        },
+
+        remove: () => {
+            if(window.confirm('データを初期化しますか?')) {
+                removeArray(this.appVue.model.Logs)
+                removeArray(this.selectionVue.model.options)
+                localStorage.setItem(LOCAL_KEY_HISTORY, '')
+                localStorage.setItem(LOCAL_KEY_ITEMS, '')
+                this.methods.setData()
+            }
+        },
+
+        updateData: () => {
+            localStorage.setItem(LOCAL_KEY_ITEMS, this.ItemList)
+            localStorage.setItem(LOCAL_KEY_HISTORY, this.HistoryList)
+
+            removeArray(this.appVue.model.Logs)
+            removeArray(this.selectionVue.model.options)
+            this.appVue.model.methods.load()
+            this.selectionVue.model.methods.load()
+            this.methods.setData()
+        }
+    }
+}
+
+class DataApp {
+    appVue: Vue
+    model: DataViewModel
+    constructor(el: string, appVue: App, selectionVue: Selection) {
+        this.model = new DataViewModel(appVue, selectionVue)
+        this.appVue = new Vue({
+            el: el,
+            data: this.model,
+            methods: this.model.methods,
+        })
+    }
+}
+
 const selection = new Selection('#selection')
 selection.model.methods.load()
 if (0 == selection.model.options.length) {
@@ -264,4 +326,5 @@ if (0 == selection.model.options.length) {
 const app = new App("#app", selection)
 app.model.methods.load()
 
-const history = new History("#history", app)
+const history_ = new History('#history', app)
+const dataApp = new DataApp('#data', app, selection)

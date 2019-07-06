@@ -91,7 +91,25 @@
                     <span>History: 今までのタイムスタンプ．CSVでダウンロードもここから(と思ったけど未実装．欲しくなったら作る)</span><br />
                     <br />
                     その他: HTML/Javascriptのみなのでデータはブラウザ側に保存されます．
-
+                </div>
+            </li>
+            <li>
+                <a class="uk-accordion-title" href="#">データ移行</a>
+                <div id="data" class="uk-accordion-content">
+                    <span>現在のデータです．別ブラウザに移行する際にはこの値をコピペで移行してください．</span>
+                    <div>
+                        <div>項目一覧:
+                            <input class="uk-input" style="width: 10em" type="text" v-model="ItemList" v-on:change="updateData()"/>
+                            <button class="uk-button uk-button-primary">コピー</button>
+                        </div>
+                        <div>履歴一覧:
+                            <input class="uk-input" style="width: 10em" type="text" v-model="HistoryList" v-on:change="updateData()" />
+                            <button class="uk-button uk-button-primary">コピー</button>
+                        </div>
+                        <buttton class="uk-button uk-button-danger" v-on:click="remove">
+                            データ削除
+                        </buttton>
+                    </div>
                 </div>
             </li>
         </ul>

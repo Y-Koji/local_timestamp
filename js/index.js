@@ -5,6 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var vue_1 = __importDefault(require("vue"));
 var isEmpty = function (x) { return /^\s*$/g.test(x); };
+var removeArray = function (x) {
+    var length = x.length;
+    for (var i = 0; i < length; i++) {
+        x.pop();
+    }
+};
+var LOCAL_KEY_ITEMS = 'items';
+var LOCAL_KEY_HISTORY = 'app';
 var SelectionItem = /** @class */ (function () {
     function SelectionItem(name) {
         this.Name = "";
@@ -49,10 +57,10 @@ var SelectionViewModel = /** @class */ (function () {
                 return filterd;
             },
             save: function () {
-                localStorage.setItem('items', JSON.stringify(_this.options));
+                localStorage.setItem(LOCAL_KEY_ITEMS, JSON.stringify(_this.options));
             },
             load: function () {
-                var json = localStorage.getItem('items') || '';
+                var json = localStorage.getItem(LOCAL_KEY_ITEMS) || '';
                 if (!isEmpty(json)) {
                     var items = JSON.parse(json);
                     var length_1 = _this.options.length;
@@ -137,7 +145,7 @@ var AppViewModel = /** @class */ (function () {
                 return filterd;
             },
             load: function () {
-                var json = localStorage.getItem('app') || '';
+                var json = localStorage.getItem(LOCAL_KEY_HISTORY) || '';
                 if (!isEmpty(json)) {
                     var logs = JSON.parse(json);
                     var length_2 = _this.Logs.length;
@@ -150,7 +158,7 @@ var AppViewModel = /** @class */ (function () {
                 }
             },
             save: function () {
-                localStorage.setItem('app', JSON.stringify(_this.Logs));
+                localStorage.setItem(LOCAL_KEY_HISTORY, JSON.stringify(_this.Logs));
             }
         };
         this.selection = selection;
@@ -222,6 +230,52 @@ var History = /** @class */ (function () {
     }
     return History;
 }());
+var DataViewModel = /** @class */ (function () {
+    function DataViewModel(appVue, selectionVue) {
+        var _this = this;
+        this.ItemList = 'ccc';
+        this.HistoryList = '';
+        this.methods = {
+            setData: function () {
+                _this.ItemList = JSON.stringify(_this.selectionVue.model.options);
+                _this.HistoryList = JSON.stringify(_this.appVue.model.Logs);
+            },
+            remove: function () {
+                if (window.confirm('データを初期化しますか?')) {
+                    removeArray(_this.appVue.model.Logs);
+                    removeArray(_this.selectionVue.model.options);
+                    localStorage.setItem(LOCAL_KEY_HISTORY, '');
+                    localStorage.setItem(LOCAL_KEY_ITEMS, '');
+                    _this.methods.setData();
+                }
+            },
+            updateData: function () {
+                localStorage.setItem(LOCAL_KEY_ITEMS, _this.ItemList);
+                localStorage.setItem(LOCAL_KEY_HISTORY, _this.HistoryList);
+                removeArray(_this.appVue.model.Logs);
+                removeArray(_this.selectionVue.model.options);
+                _this.appVue.model.methods.load();
+                _this.selectionVue.model.methods.load();
+                _this.methods.setData();
+            }
+        };
+        this.appVue = appVue;
+        this.selectionVue = selectionVue;
+        this.methods.setData();
+    }
+    return DataViewModel;
+}());
+var DataApp = /** @class */ (function () {
+    function DataApp(el, appVue, selectionVue) {
+        this.model = new DataViewModel(appVue, selectionVue);
+        this.appVue = new vue_1.default({
+            el: el,
+            data: this.model,
+            methods: this.model.methods,
+        });
+    }
+    return DataApp;
+}());
 var selection = new Selection('#selection');
 selection.model.methods.load();
 if (0 == selection.model.options.length) {
@@ -233,4 +287,5 @@ if (0 == selection.model.options.length) {
 }
 var app = new App("#app", selection);
 app.model.methods.load();
-var history = new History("#history", app);
+var history_ = new History('#history', app);
+var dataApp = new DataApp('#data', app, selection);
