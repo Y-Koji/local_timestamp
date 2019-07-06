@@ -181,18 +181,25 @@ var HistoryViewModel = /** @class */ (function () {
             },
             filter: function (logs) {
                 var filterd = [];
-                for (var i = 0; i < logs.length && filterd.length < Number(_this.ShowCount); i++) {
+                var _loop_1 = function (i) {
                     var log = logs[i];
                     if (!isEmpty(_this.search)) {
-                        if (-1 != log.Time.indexOf(_this.search) ||
-                            -1 != log.Type.indexOf(_this.search) ||
-                            -1 != log.Memo.indexOf(_this.search)) {
+                        var words = _this.search.split(' ');
+                        var result = words.every(function (word) {
+                            return (-1 != log.Time.indexOf(word) ||
+                                -1 != log.Type.indexOf(word) ||
+                                -1 != log.Memo.indexOf(word));
+                        });
+                        if (result === true) {
                             filterd.push(log);
                         }
                     }
                     else {
                         filterd.push(log);
                     }
+                };
+                for (var i = 0; i < logs.length && filterd.length < Number(_this.ShowCount); i++) {
+                    _loop_1(i);
                 }
                 return filterd;
             },
@@ -234,3 +241,4 @@ if (0 == selection.model.options.length) {
 var app = new App("#app", selection);
 app.model.methods.load();
 var history = new History("#history", app);
+//# sourceMappingURL=index.js.map

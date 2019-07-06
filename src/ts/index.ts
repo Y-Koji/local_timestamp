@@ -219,11 +219,16 @@ class HistoryViewModel {
                 const log = logs[i];
 
                 if (!isEmpty(this.search)) {
-                    if (-1 != log.Time.indexOf(this.search) ||
-                        -1 != log.Type.indexOf(this.search) ||
-                        -1 != log.Memo.indexOf(this.search)) {
-                            filterd.push(log)
-                        }
+                    const words = this.search.split(' ')
+                    const result = words.every(word => {
+                        return (-1 != log.Time.indexOf(word) ||
+                         -1 != log.Type.indexOf(word) ||
+                         -1 != log.Memo.indexOf(word))
+                    })
+
+                    if (result === true) {
+                        filterd.push(log)
+                    }
                 } else {
                     filterd.push(log)
                 }
