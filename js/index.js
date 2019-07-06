@@ -249,6 +249,14 @@ var DataViewModel = /** @class */ (function () {
                     _this.methods.setData();
                 }
             },
+            copy: function (settingId) {
+                var element = document.getElementById(settingId);
+                if (null != element) {
+                    var input = element;
+                    input.select();
+                    document.execCommand('copy');
+                }
+            },
             updateData: function () {
                 localStorage.setItem(LOCAL_KEY_ITEMS, _this.ItemList);
                 localStorage.setItem(LOCAL_KEY_HISTORY, _this.HistoryList);

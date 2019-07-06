@@ -287,6 +287,15 @@ class DataViewModel {
             }
         },
 
+        copy: (settingId: string) => {
+            const element = document.getElementById(settingId)
+            if (null != element) {
+                const input: HTMLInputElement = <HTMLInputElement>element;
+                input.select()
+                document.execCommand('copy')
+            }
+        },
+
         updateData: () => {
             localStorage.setItem(LOCAL_KEY_ITEMS, this.ItemList)
             localStorage.setItem(LOCAL_KEY_HISTORY, this.HistoryList)
