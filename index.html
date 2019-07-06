@@ -20,7 +20,7 @@
                     <div>
                         <input class="uk-input uk-width-1-6" type="text" placeholder="項目名" v-model="itemName">
                         <button class="uk-button uk-button-primary" v-on:click="add">Add</button>
-                        <input class="uk-input uk-width-1-6" type="text" placeholder="検索" v-model="search">
+                        <input class="uk-input uk-width-1-6" type="text" placeholder="検索(正規表現)" v-model="search">
                         <div>{{ msg }}</div>
                     </div>
                     <hr />
@@ -65,12 +65,12 @@
                     <button class="uk-button uk-button-secondary">CSV Download</button>
                     <hr />
                     <div id="history">
-                        <div>
-                            <label>全{{ Logs.length }}件中<input class="uk-input uk-width-1-6" type="number" v-model="ShowCount" /> 件表示</label>
-                        </div>
-                        <div>
-                            <input class="uk-input uk-width-1-4" v-model="search" type="text" placeholder="検索" />
-                        </div>
+                            <div>
+                                <label>全{{ Logs.length }}件中<input class="uk-input uk-width-1-6" type="number" v-model="ShowCount" /> 件表示</label>
+                            </div>
+                            <div>
+                                <input class="uk-input uk-width-1-4" v-model="search" type="text" placeholder="検索(正規表現)" />
+                            </div>
                         <ol>
                             <li v-for='x in filter(Logs)' class="uk-child-width-auto">
                                 <input type="text" class="uk-input" v-model="x.Time" />
@@ -92,8 +92,27 @@
                     <span>Today: 今日のタイムスタンプ．コンボボックスで種別を選んでADD!</span><br />
                     <span>History: 今までのタイムスタンプ．CSVでダウンロードもここから(と思ったけど未実装．欲しくなったら作る)</span><br />
                     <br />
-                    その他: HTML/Javascriptのみなのでデータはブラウザ側に保存されます．
-
+                    その他: HTML/Javascriptのみなのでデータはブラウザ側に保存されます．<br />
+                    検索機能は正規表現が利用でき，全て(時間，種別，メモ)が検索対象です．
+                </div>
+            </li>
+            <li>
+                <a class="uk-accordion-title" href="#">データ移行</a>
+                <div id="data" class="uk-accordion-content">
+                    <span>現在のデータです．別ブラウザに移行する際にはこの値をコピペで移行してください．</span>
+                    <div>
+                        <div>項目一覧:
+                            <input id="setting-1" class="uk-input" style="width: 10em" type="text" v-model="ItemList" v-on:change="updateData()"/>
+                            <button class="uk-button uk-button-primary" v-on:click="copy('setting-1')">コピー</button>
+                        </div>
+                        <div>履歴一覧:
+                            <input id="setting-2" class="uk-input" style="width: 10em" type="text" v-model="HistoryList" v-on:change="updateData()" />
+                            <button class="uk-button uk-button-primary" v-on:click="copy('setting-2')">コピー</button>
+                        </div>
+                        <buttton class="uk-button uk-button-danger" v-on:click="remove">
+                            データ削除
+                        </buttton>
+                    </div>
                 </div>
             </li>
         </ul>
