@@ -224,6 +224,8 @@ var HistoryViewModel = /** @class */ (function () {
         };
         this.App = appVue;
         this.Logs = appVue.model.Logs;
+        var now = new Date(Date.now());
+        this.search = String(now.getUTCFullYear()) + '/' + String(now.getUTCMonth() + 1);
         if (100 < this.Logs.length) {
             this.ShowCount = "100";
         }

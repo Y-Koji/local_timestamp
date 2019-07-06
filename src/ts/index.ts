@@ -28,6 +28,9 @@ class SelectionViewModel {
     msg: string = ''
     selectionChanged: any = null
 
+    constructor() {
+    }
+
     methods = {
         add: () => {
             if (!isEmpty(this.itemName)) {
@@ -83,9 +86,6 @@ class SelectionViewModel {
                 })
             }
         }
-    }
-
-    constructor() {
     }
 }
 
@@ -221,6 +221,9 @@ class HistoryViewModel {
     constructor(appVue: App) {
         this.App = appVue
         this.Logs = appVue.model.Logs
+
+        const now = new Date(Date.now())
+        this.search = String(now.getUTCFullYear()) + '/' + String(now.getUTCMonth() + 1)
 
         if (100 < this.Logs.length) {
             this.ShowCount = "100"
