@@ -9,30 +9,6 @@
 </head>
 <body>
     <h1 class="uk-heading-primary">timestamp</h1>
-    <!-- <div class="uk-button-group uk-flex">
-        <button class="uk-button uk-button-default uk-width-1-4">BUTTON</button>
-        <button class="uk-button uk-button-primary uk-width-1-4">BUTTON</button>
-        <button class="uk-button uk-button-secondary uk-width-1-4">BUTTON</button>
-        <button class="uk-button uk-button-danger uk-width-1-4">BUTTON</button>
-        <button class="uk-button uk-button-text uk-width-1-4">BUTTON</button>
-        <button class="uk-button uk-button-link uk-width-1-4">BUTTON</button>
-    </div>
-    <ul uk-accordion>
-        <li>
-            <a class="uk-accordion-title" href="#">
-                <button></button>
-            </a>
-            <div class="uk-accordion-content">
-                CONTENT
-            </div>
-        </li>
-    </ul>
-    <div class="uk-child-width-expand" uk-grid>
-        <div class="uk-button uk-button-default">あ</div>
-        <div class="uk-button uk-button-default">ｓ</div>
-        <div class="uk-button uk-button-default">e</div>
-        <div class="uk-button uk-button-default">f</div>
-    </div> -->
     <hr />
     <div>
         <ul uk-accordion>
@@ -59,8 +35,8 @@
             </li>
             <li>
                 <a class="uk-accordion-title" href="#">Today</a>
-                <div id='app' class="uk-accordion-content uk-form-controls">
-                    <select class="uk-select uk-width-1-6" v-model="type">
+                <div id='app' class="uk-accordion-content uk-form-controls uk-child-width-auto">
+                    <select class="uk-select" v-model="type">
                         <option v-for='x in filterSelection(selection.model.options)'>
                             {{ x.Name }}
                         </option>
@@ -70,12 +46,12 @@
                     <div>{{ msg }}</div>
                     <hr />
                     <ol>
-                        <li v-for='x in Logs'>
-                            <input type="text" class="uk-input uk-width-1-4" v-model="x.Time" />
-                            <select v-model="x.Type" class="uk-select uk-width-1-6" v-on:change="app.model.methods.save()">
+                        <li class="uk-child-width-auto" v-for='x in filterLogs(Logs)'>
+                            <input type="text" class="uk-input" v-model="x.Time" />
+                            <select v-model="x.Type" class="uk-select" v-on:change="app.model.methods.save()">
                                     <option v-for="item in selection.model.options">{{ item.Name }}</option>
                             </select>
-                            <input type="text" class="uk-input uk-width-1-4" v-model="x.Memo" v-on:change="app.model.methods.save()" />
+                            <input type="text" class="uk-input" v-model="x.Memo" v-on:change="app.model.methods.save()" />
                             <button class="uk-button uk-button-danger" v-on:click='removeItem(x)'>Remove</button>
                         </li>
                     </ol>
@@ -94,12 +70,12 @@
                                 <input class="uk-input uk-width-1-4" v-model="search" type="text" placeholder="検索" />
                             </div>
                         <ol>
-                            <li v-for='x in filter(Logs)'>
-                                <input type="text" class="uk-input uk-width-1-4" v-model="x.Time" />
-                                <select v-model="x.Type" class="uk-select uk-width-1-6" v-on:change="app.model.methods.save()">
+                            <li v-for='x in filter(Logs)' class="uk-child-width-auto">
+                                <input type="text" class="uk-input" v-model="x.Time" />
+                                <select v-model="x.Type" class="uk-select" v-on:change="app.model.methods.save()">
                                     <option v-for="item in selection.model.options">{{ item.Name }}</option>
                                 </select>
-                                <input type="text" class="uk-input uk-width-1-4" v-model="x.Memo" v-on:change="app.model.methods.save()" />
+                                <input type="text" class="uk-input" v-model="x.Memo" v-on:change="app.model.methods.save()" />
                                 <button class="uk-button uk-button-danger" v-on:click='removeItem(x)'>Remove</button>
                             </li>
                         </ol>

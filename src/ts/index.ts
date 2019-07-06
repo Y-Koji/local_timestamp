@@ -140,6 +140,21 @@ class AppViewModel {
             return filterd
         },
 
+        filterLogs: (logs: LogItem[]) => {
+            const filterd: LogItem[] = []
+            logs.forEach(log => {
+                const time = log.Time
+                const logDate = new Date(time)
+                const nowDate = new Date(Date.now())
+                if (logDate.getUTCFullYear() === nowDate.getUTCFullYear() &&
+                    logDate.getUTCMonth() === nowDate.getUTCMonth() &&
+                    logDate.getUTCDay() === nowDate.getUTCDay()) {
+                    filterd.push(log)
+                }
+            });
+            return filterd
+        },
+
         load: () => {
             const json = localStorage.getItem('app') || ''
             if (!isEmpty(json)) {

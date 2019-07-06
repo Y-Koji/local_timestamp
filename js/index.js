@@ -122,6 +122,20 @@ var AppViewModel = /** @class */ (function () {
                 });
                 return filterd;
             },
+            filterLogs: function (logs) {
+                var filterd = [];
+                logs.forEach(function (log) {
+                    var time = log.Time;
+                    var logDate = new Date(time);
+                    var nowDate = new Date(Date.now());
+                    if (logDate.getUTCFullYear() === nowDate.getUTCFullYear() &&
+                        logDate.getUTCMonth() === nowDate.getUTCMonth() &&
+                        logDate.getUTCDay() === nowDate.getUTCDay()) {
+                        filterd.push(log);
+                    }
+                });
+                return filterd;
+            },
             load: function () {
                 var json = localStorage.getItem('app') || '';
                 if (!isEmpty(json)) {
