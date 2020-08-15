@@ -241,16 +241,21 @@ class HistoryViewModel {
 
         filter: (logs: LogItem[]) => {
             const filterd: LogItem[] = []
-            const regex  = new RegExp(this.search || '')
             for (let i = 0; i < logs.length && filterd.length < Number(this.ShowCount); i++) {
                 const log = logs[i];
 
                 if (!isEmpty(this.search)) {
-                    if (regex.test(log.Time) ||
-                        regex.test(log.Type) ||
-                        regex.test(log.Memo)) {
-                            filterd.push(log)
-                        }
+                    const words = this.search.split(' ')
+                    const result = words.every(word => {
+                        const regex = new RegExp(word || '')
+                        return (regex.test(log.Time) ||
+                                regex.test(log.Type) ||
+                                regex.test(log.Memo))
+                    })
+
+                    if (result === true) {
+                        filterd.push(log)
+                    }
                 } else {
                     filterd.push(log)
                 }

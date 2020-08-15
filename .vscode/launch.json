@@ -1,0 +1,25 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}\\.eslintrc.js"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Chrome",
+            "address": "localhost",
+            "url": "http://localhost/index.html",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+            // "preLaunchTask": "launch Node",
+            //"postDebugTask": "stop Node"
+        }
+    ]
+}

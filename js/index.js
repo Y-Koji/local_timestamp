@@ -203,19 +203,26 @@ var HistoryViewModel = /** @class */ (function () {
             },
             filter: function (logs) {
                 var filterd = [];
-                var regex = new RegExp(_this.search || '');
-                for (var i = 0; i < logs.length && filterd.length < Number(_this.ShowCount); i++) {
+                var _loop_1 = function (i) {
                     var log = logs[i];
                     if (!isEmpty(_this.search)) {
-                        if (regex.test(log.Time) ||
-                            regex.test(log.Type) ||
-                            regex.test(log.Memo)) {
+                        var words = _this.search.split(' ');
+                        var result = words.every(function (word) {
+                            var regex = new RegExp(word || '');
+                            return (regex.test(log.Time) ||
+                                regex.test(log.Type) ||
+                                regex.test(log.Memo));
+                        });
+                        if (result === true) {
                             filterd.push(log);
                         }
                     }
                     else {
                         filterd.push(log);
                     }
+                };
+                for (var i = 0; i < logs.length && filterd.length < Number(_this.ShowCount); i++) {
+                    _loop_1(i);
                 }
                 return filterd;
             },
@@ -316,3 +323,4 @@ var app = new App("#app", selection);
 app.model.methods.load();
 var history_ = new History('#history', app);
 var dataApp = new DataApp('#data', app, selection);
+//# sourceMappingURL=index.js.map
